@@ -4,26 +4,22 @@ namespace Spatie\Valuestore;
 
 use Countable;
 use ArrayAccess;
-
 class Valuestore implements ArrayAccess, Countable
 {
     /** @var string */
     protected $fileName;
-
     /**
      * @param string $fileName
      *
      * @return $this
      */
-    public static function make(string $fileName)
+    public static function make($fileName)
     {
         return (new static())->setFileName($fileName);
     }
-
     protected function __construct()
     {
     }
-
     /**
      * Set the filename where all values will be stored.
      *
@@ -31,13 +27,11 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return $this
      */
-    protected function setFileName(string $fileName)
+    protected function setFileName($fileName)
     {
         $this->fileName = $fileName;
-
         return $this;
     }
-
     /**
      * Put a value in the store.
      *
@@ -49,18 +43,13 @@ class Valuestore implements ArrayAccess, Countable
     public function put($name, $value = null)
     {
         $newValues = $name;
-
-        if (! is_array($name)) {
+        if (!is_array($name)) {
             $newValues = [$name => $value];
         }
-
         $newContent = array_merge($this->all(), $newValues);
-
         $this->setContent($newContent);
-
         return $this;
     }
-
     /**
      * Push a new value into an array.
      *
@@ -69,33 +58,25 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return $this
      */
-    public function push(string $name, $pushValue)
+    public function push($name, $pushValue)
     {
-        if (! is_array($pushValue)) {
+        if (!is_array($pushValue)) {
             $pushValue = [$pushValue];
         }
-
-        if (! $this->has($name)) {
+        if (!$this->has($name)) {
             $this->put($name, $pushValue);
-
             return $this;
         }
-
         $oldValue = $this->get($name);
-
-        if (! is_array($oldValue)) {
+        if (!is_array($oldValue)) {
             $oldValue = [$oldValue];
         }
-
         if (is_array($oldValue)) {
             $newValue = array_merge($oldValue, $pushValue);
         }
-
         $this->put($name, $newValue);
-
         return $this;
     }
-
     /**
      * Prepend a new value in an array.
      *
@@ -104,33 +85,25 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return $this
      */
-    public function prepend(string $name, $prependValue)
+    public function prepend($name, $prependValue)
     {
-        if (! is_array($prependValue)) {
+        if (!is_array($prependValue)) {
             $prependValue = [$prependValue];
         }
-
-        if (! $this->has($name)) {
+        if (!$this->has($name)) {
             $this->put($name, $prependValue);
-
             return $this;
         }
-
         $oldValue = $this->get($name);
-
-        if (! is_array($oldValue)) {
+        if (!is_array($oldValue)) {
             $oldValue = [$oldValue];
         }
-
         if (is_array($oldValue)) {
             $newValue = array_merge($prependValue, $oldValue);
         }
-
         $this->put($name, $newValue);
-
         return $this;
     }
-
     /**
      * Get a value from the store.
      *
@@ -139,37 +112,32 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return null|string
      */
-    public function get(string $name, $default = null)
+    public function get($name, $default = null)
     {
-        if (! array_key_exists($name, $this->all())) {
+        if (!array_key_exists($name, $this->all())) {
             return $default;
         }
-
         return $this->all()[$name];
     }
-
     /*
      * Determine if the store has a value for the given name.
      */
-    public function has(string $name) : bool
+    public function has($name)
     {
         return array_key_exists($name, $this->all());
     }
-
     /**
      * Get all values from the store.
      *
      * @return array
      */
-    public function all() : array
+    public function all()
     {
-        if (! file_exists($this->fileName)) {
+        if (!file_exists($this->fileName)) {
             return [];
         }
-
         return json_decode(file_get_contents($this->fileName), true);
     }
-
     /**
      * Get all keys starting with a given string from the store.
      *
@@ -177,17 +145,14 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return array
      */
-    public function allStartingWith(string $startingWith = '') : array
+    public function allStartingWith($startingWith = '')
     {
         $values = $this->all();
-
         if ($startingWith === '') {
             return $values;
         }
-
         return $this->filterKeysStartingWith($values, $startingWith);
     }
-
     /**
      * Forget a value from the store.
      *
@@ -195,17 +160,13 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return $this
      */
-    public function forget(string $key)
+    public function forget($key)
     {
         $newContent = $this->all();
-
         unset($newContent[$key]);
-
         $this->setContent($newContent);
-
         return $this;
     }
-
     /**
      * Flush all values from the store.
      *
@@ -215,7 +176,6 @@ class Valuestore implements ArrayAccess, Countable
     {
         return $this->setContent([]);
     }
-
     /**
      * Flush all values which keys start with a given string.
      *
@@ -223,17 +183,14 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return $this
      */
-    public function flushStartingWith(string $startingWith = '')
+    public function flushStartingWith($startingWith = '')
     {
         $newContent = [];
-
         if ($startingWith !== '') {
             $newContent = $this->filterKeysNotStartingWith($this->all(), $startingWith);
         }
-
         return $this->setContent($newContent);
     }
-
     /**
      * Get and forget a value from the store.
      *
@@ -241,15 +198,12 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return null|string
      */
-    public function pull(string $name)
+    public function pull($name)
     {
         $value = $this->get($name);
-
         $this->forget($name);
-
         return $value;
     }
-
     /**
      * Increment a value from the store.
      *
@@ -258,17 +212,13 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return int|null|string
      */
-    public function increment(string $name, int $by = 1)
+    public function increment($name, $by = 1)
     {
-        $currentValue = $this->get($name) ?? 0;
-
+        $currentValue = isset($this->get($name)) ? $this->get($name) : 0;
         $newValue = $currentValue + $by;
-
         $this->put($name, $newValue);
-
         return $newValue;
     }
-
     /**
      * Decrement a value from the store.
      *
@@ -277,11 +227,10 @@ class Valuestore implements ArrayAccess, Countable
      *
      * @return int|null|string
      */
-    public function decrement(string $name, int $by = 1)
+    public function decrement($name, $by = 1)
     {
         return $this->increment($name, $by * -1);
     }
-
     /**
      * Whether a offset exists.
      *
@@ -295,7 +244,6 @@ class Valuestore implements ArrayAccess, Countable
     {
         return $this->has($offset);
     }
-
     /**
      * Offset to retrieve.
      *
@@ -309,7 +257,6 @@ class Valuestore implements ArrayAccess, Countable
     {
         return $this->get($offset);
     }
-
     /**
      * Offset to set.
      *
@@ -322,7 +269,6 @@ class Valuestore implements ArrayAccess, Countable
     {
         $this->put($offset, $value);
     }
-
     /**
      * Offset to unset.
      *
@@ -334,7 +280,6 @@ class Valuestore implements ArrayAccess, Countable
     {
         $this->forget($offset);
     }
-
     /**
      * Count elements.
      *
@@ -346,26 +291,22 @@ class Valuestore implements ArrayAccess, Countable
     {
         return count($this->all());
     }
-
-    protected function filterKeysStartingWith(array $values, string $startsWith) : array
+    protected function filterKeysStartingWith(array $values, $startsWith)
     {
-        return array_filter($values, function ($key) use ($startsWith) {
+        return array_filter($values, function ($key) use($startsWith) {
             return $this->startsWith($key, $startsWith);
         }, ARRAY_FILTER_USE_KEY);
     }
-
-    protected function filterKeysNotStartingWith(array $values, string $startsWith) : array
+    protected function filterKeysNotStartingWith(array $values, $startsWith)
     {
-        return array_filter($values, function ($key) use ($startsWith) {
-            return ! $this->startsWith($key, $startsWith);
+        return array_filter($values, function ($key) use($startsWith) {
+            return !$this->startsWith($key, $startsWith);
         }, ARRAY_FILTER_USE_KEY);
     }
-
-    protected function startsWith(string $haystack, string $needle) : bool
+    protected function startsWith($haystack, $needle)
     {
         return substr($haystack, 0, strlen($needle)) === $needle;
     }
-
     /**
      * @param array $values
      *
@@ -374,11 +315,9 @@ class Valuestore implements ArrayAccess, Countable
     protected function setContent(array $values)
     {
         file_put_contents($this->fileName, json_encode($values));
-
-        if (! count($values)) {
+        if (!count($values)) {
             unlink($this->fileName);
         }
-
         return $this;
     }
 }

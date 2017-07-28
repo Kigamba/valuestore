@@ -1,6 +1,6 @@
 {
-    "name": "spatie/valuestore",
-    "description": "Easily store some values",
+    "name": "kigamba/valuestore",
+    "description": "Easily store some values. Now supports PHP 5",
     "keywords": [
         "spatie",
         "valuestore",
@@ -20,10 +20,16 @@
             "email": "jolita@spatie.be",
             "homepage": "https://spatie.be",
             "role": "Developer"
+        },
+        {
+            "name": "Ephraim Kigamba",
+            "email": "kigamba@uzapos.com",
+            "homepage": "https://uzapos.com",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php" : "^7.0"
+        "php" : ">=5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.0"
