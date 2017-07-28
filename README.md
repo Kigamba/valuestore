@@ -71,7 +71,7 @@ The best postcards will get published on the open source page on our website.
 You can install the package via composer:
 
 ``` bash
-composer require kigamba/valuestore
+composer require "kigamba/valuestore dev-master"
 ```
 
 ## Usage
