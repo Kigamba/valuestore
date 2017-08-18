@@ -214,7 +214,8 @@ class Valuestore implements ArrayAccess, Countable
      */
     public function increment($name, $by = 1)
     {
-        $currentValue = isset($this->get($name)) ? $this->get($name) : 0;
+        $gottenName = $this->get($name);
+        $currentValue = isset($gottenName) ? $this->get($name) : 0;
         $newValue = $currentValue + $by;
         $this->put($name, $newValue);
         return $newValue;

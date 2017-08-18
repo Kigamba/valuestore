@@ -9,7 +9,7 @@
 
 This package makes it easy to store and retrieve some values. Stores values are saved as a json in a file.
 
-Support >= PHP 5.0 The parent library support PHP 5.0 only
+Support >= PHP 5.0 The parent library supports PHP >= 7.0 only
 
 It can be used like this:
 
@@ -71,7 +71,7 @@ The best postcards will get published on the open source page on our website.
 You can install the package via composer:
 
 ``` bash
-composer require "kigamba/valuestore dev-master"
+composer require kigamba/valuestore
 ```
 
 ## Usage
